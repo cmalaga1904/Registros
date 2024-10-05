@@ -1,0 +1,7 @@
+void mostrarPasajeros(Pasajero* cabeza) {
+    Pasajero* actual = cabeza;
+    while (actual != NULL) {
+        cout << "Nombre: " << actual->nombre << ", Documento: " << actual->documento << ", Destino: " << actual->destino << endl;
+        actual = actual->siguiente;
+    }
+}
