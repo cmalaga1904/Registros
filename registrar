@@ -1,0 +1,25 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+struct Pasajero {
+    string nombre;
+    int documento;
+    float destino;
+    Pasajero* siguiente;
+};
+
+Pasajero* registrarPasajero(const string& nombre, int documento, float destino) {
+    Pasajero* nuevo = new Pasajero;
+    nuevo->nombre = nombre;
+    nuevo->documento = documento;
+    nuevo->destino = destino;
+    nuevo->siguiente = NULL;
+    return nuevo;
+}
+
+void introducirPasajero(Pasajero*& cabeza, const string& nombre, int documento, float destino) {
+    Pasajero* nuevo = registrarPasajero(nombre, documento, destino);
+    nuevo->siguiente = cabeza;
+    cabeza = nuevo;
+}
