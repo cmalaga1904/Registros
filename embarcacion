@@ -1,0 +1,137 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+struct Pasajero {
+    string nombre;
+    int documento;
+    float destino;
+    Pasajero* siguiente;
+};
+
+Pasajero* registrarPasajero(const string& nombre, int documento, float destino) {
+    Pasajero* nuevo = new Pasajero;
+    nuevo->nombre = nombre;
+    nuevo->documento = documento;
+    nuevo->destino = destino;
+    nuevo->siguiente = NULL;
+    return nuevo;
+}
+
+void introducirPasajero(Pasajero*& cabeza, const string& nombre, int documento, float destino) {
+    Pasajero* nuevo = registrarPasajero(nombre, documento, destino);
+    nuevo->siguiente = cabeza;
+    cabeza = nuevo;
+}
+
+void mostrarPasajeros(Pasajero* cabeza) {
+    Pasajero* actual = cabeza;
+    while (actual != NULL) {
+        cout << "Nombre: " << actual->nombre << ", Documento: " << actual->documento << ", Destino: " << actual->destino << endl;
+        actual = actual->siguiente;
+    }
+}
+
+void ordenarPorDocumento(Pasajero*& cabeza) {
+    if (cabeza == NULL) return;
+    bool ordenado;
+    do {
+        ordenado = true;
+        Pasajero* actual = cabeza;
+        while (actual->siguiente != NULL) {
+            if (actual->documento > actual->siguiente->documento) {
+                swap(*actual, *actual->siguiente);
+                ordenado = false;
+            }
+            actual = actual->siguiente;
+        }
+    } while (!ordenado);
+}
+
+void ordenarPorDestino(Pasajero*& cabeza) {
+    if (cabeza == NULL) return;
+    bool ordenado;
+    do {
+        ordenado = true;
+        Pasajero* actual = cabeza;
+        while (actual->siguiente != NULL) {
+            if (actual->destino > actual->siguiente->destino) {
+                swap(*actual, *actual->siguiente);
+                ordenado = false;
+            }
+            actual = actual->siguiente;
+        }
+    } while (!ordenado);
+}
+
+void mayorDestino(Pasajero* cabeza) {
+    if (cabeza == NULL) {
+        cout << "La lista está vacía." << endl;
+        return;
+    }
+    Pasajero* mayor = cabeza;
+    Pasajero* actual = cabeza->siguiente;
+    while (actual != NULL) {
+        if (actual->destino > mayor->destino) {
+            mayor = actual;
+        }
+        actual = actual->siguiente;
+    }
+    cout << "El pasajero con el destino más lejano es: " << mayor->nombre << " con destino " << mayor->destino << endl;
+}
+
+void menu(Pasajero*& cabeza) {
+    int opcion;
+    do {
+        cout << "\n--- Menú de Gestión de Pasajeros ---\n";
+        cout << "1. Registrar pasajero\n";
+        cout << "2. Ordenar lista por Documento (menor a mayor)\n";
+        cout << "3. Ordenar lista por Destino (menor a mayor)\n";
+        cout << "4. Mostrar pasajero con destino más lejano\n";
+        cout << "5. Mostrar lista de pasajeros\n";
+        cout << "6. Salir\n";
+        cout << "Seleccione una opción: ";
+        cin >> opcion;
+
+        switch (opcion) {
+            case 1: {
+                string nombre;
+                int documento, destino;
+                cout << "Ingrese el nombre del pasajero: ";
+                cin >> nombre;
+                cout << "Ingrese el documento: ";
+                cin >> documento;
+                cout << "Ingrese el destino (1: La Bocana, 2: Piangüita, 3: Ladrilleros): ";
+                cin >> destino;
+                introducirPasajero(cabeza, nombre, documento, destino);
+                cout << "Pasajero registrado con éxito.\n";
+                break;
+            }
+            case 2:
+                ordenarPorDocumento(cabeza);
+                cout << "Pasajeros ordenados por documento.\n";
+                break;
+            case 3:
+                ordenarPorDestino(cabeza);
+                cout << "Pasajeros ordenados por destino.\n";
+                break;
+            case 4:
+                mayorDestino(cabeza);
+                break;
+            case 5:
+                mostrarPasajeros(cabeza);
+                break;
+            case 6:
+                cout << "Saliendo...\n";
+                break;
+            default:
+                cout << "Opción no válida. Intente de nuevo.\n";
+        }
+    } while (opcion != 6);
+}
+
+int main() {
+    Pasajero* listaPasajeros = NULL;
+    menu(listaPasajeros);
+    return 0;
+}
